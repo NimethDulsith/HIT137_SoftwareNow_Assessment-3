@@ -33,3 +33,16 @@ class ImageEditorApp:
         self.status_bar = GUIBuilder.create_status_bar(self.root)
         
         self.handlers = EventHandlers(self.processor, self.history, self.canvas, self.status_bar)
+        
+        handler_callbacks = {
+            'grayscale': self.handlers.apply_grayscale,
+            'edge_detection': self.handlers.apply_edge_detection,
+            'blur': self.handlers.apply_blur,
+            'brightness': self.handlers.apply_brightness,
+            'contrast': self.handlers.apply_contrast,
+            'rotate': self.handlers.rotate_image,
+            'flip': self.handlers.flip_image,
+            'resize': self.handlers.resize_image,
+            'undo': self.handlers.undo_action,
+            'redo': self.handlers.redo_action
+        }
