@@ -46,3 +46,23 @@ class ImageEditorApp:
             'undo': self.handlers.undo_action,
             'redo': self.handlers.redo_action
         }
+        
+        GUIBuilder.create_control_panel(main_frame, handler_callbacks)
+        
+        menu_handlers = {
+            'open': self.handlers.open_image,
+            'save': self.handlers.save_image,
+            'save_as': self.handlers.save_as_image,
+            'undo': self.handlers.undo_action,
+            'redo': self.handlers.redo_action,
+            'reset': self.handlers.reset_image
+        }
+        
+        GUIBuilder.create_menu_bar(self.root, menu_handlers)
+    
+    def _setup_shortcuts(self):
+        """Set up keyboard shortcuts."""
+        self.root.bind('<Control-z>', lambda e: self.handlers.undo_action())
+        self.root.bind('<Control-y>', lambda e: self.handlers.redo_action())
+        self.root.bind('<Control-o>', lambda e: self.handlers.open_image())
+        self.root.bind('<Control-s>', lambda e: self.handlers.save_image())
