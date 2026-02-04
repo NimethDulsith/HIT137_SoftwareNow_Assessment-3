@@ -99,3 +99,102 @@ class ImageProcessor:
         height, width = self.__current_image.shape[:2]
         channels = self.__current_image.shape[2] if len(self.__current_image.shape) > 2 else 1
         return {'width': width, 'height': height, 'channels': channels}
+    
+    # Image processing operations using filter objects (POLYMORPHISM)
+    def apply_grayscale(self):
+        """Apply grayscale using filter object."""
+        if self.__current_image is None:
+            return None
+        self.__current_image = self._filters['grayscale'].apply(self.__current_image)
+        return self.__current_image.copy()
+    
+    def apply_blur(self, intensity=5):
+        """Apply blur using filter object."""
+        if self.__current_image is None:
+            return None
+        self._filters['blur'].set_intensity(intensity)
+        self.__current_image = self._filters['blur'].apply(self.__current_image)
+        return self.__current_image.copy()
+    
+    def apply_edge_detection(self):
+        """Apply edge detection using filter object."""
+        if self.__current_image is None:
+            return None
+        self.__current_image = self._filters['edge'].apply(self.__current_image)
+        return self.__current_image.copy()
+    
+    def adjust_brightness(self, value):
+        """Adjust brightness using filter object."""
+        if self.__current_image is None:
+            return None
+        self._filters['brightness'].value = value
+        self.__current_image = self._filters['brightness'].apply(self.__current_image)
+        return self.__current_image.copy()
+    
+    def adjust_contrast(self, value):
+        """Adjust contrast using filter object."""
+        if self.__current_image is None:
+            return None
+        self._filters['contrast'].value = value
+        self.__current_image = self._filters['contrast'].apply(self.__current_image)
+        return self.__current_image.copy()
+    
+    def rotate_image(self, angle):
+        """Rotate image by 90, 180, or 270 degrees."""
+        if self.__current_image is None:
+            return None
+        
+        if angle == 90:
+            self.__current_image = cv2.rotate(self.__current_image, cv2.ROTATE_90_CLOCKWISE)
+        elif angle == 180:
+            self.__current_image = cv2.rotate(self.__current_image, cv2.ROTATE_180)
+        elif angle == 270:
+            self.__current_image = cv2.rotate(self.__current_image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        
+        return self.__current_image.copy()
+    
+    def flip_image(self, direction):
+        """Flip image horizontally or vertically."""
+        if self.__current_image is None:
+            return None
+        
+        if direction == 'horizontal':
+            self.__current_image = cv2.flip(self.__current_image, 1)
+        elif direction == 'vertical':
+            self.__current_image = cv2.flip(self.__current_image, 0)
+        
+        return self.__current_image.copy()
+    
+    def resize_image(self, width, height):
+        """Resize image to specified dimensions."""
+        if self.__current_image is None:
+            return None
+        
+        if not self.validate_dimensions(width, height):
+            return None
+        
+        self.__current_image = cv2.resize(self.__current_image, (width, height))
+        return self.__current_image.copy()
+    
+    def reset_to_original(self):
+        """Reset to original loaded image."""
+        if self.__original_image is not None:
+            self.__current_image = self.__original_image.copy()
+            return self.__current_image.copy()
+        return None
+    
+    # MAGIC METHODS
+    def __str__(self):
+        """String representation for users."""
+        if self.__current_image is None:
+            return "ImageProcessor: No image loaded"
+        info = self.get_image_info()
+        return f"ImageProcessor: {info['width']}x{info['height']}, {info['channels']} channels"
+    
+    def __repr__(self):
+        """String representation for developers."""
+        return f"ImageProcessor(has_image={self.has_image})"
+    
+    def __bool__(self):
+        """Boolean conversion - True if image is loaded."""
+        return self.__current_image is not None
