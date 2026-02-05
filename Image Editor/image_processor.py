@@ -7,14 +7,6 @@ from filters import (GrayscaleFilter, BlurFilter, EdgeDetectionFilter,
 
 
 class ImageProcessor:
-    """
-    Main image processing class.
-    Demonstrates:
-    - ENCAPSULATION (private attributes with __)
-    - PROPERTY DECORATORS
-    - INSTANCE ATTRIBUTES
-    - CLASS ATTRIBUTES
-    """
     
     # CLASS ATTRIBUTE - tracks total images processed
     images_processed_count = 0
